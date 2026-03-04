@@ -98,12 +98,14 @@ int main(){
                     st.printInfo();
                     cout << "---\n";
                 }
+                break;
             case 3:
                 sort(students.begin(), students.end());
                 for (auto& st : students) {
                     st.printInfo();
                     cout << "---\n";
                 }
+                break;
             case 4: // 종료
                 saveStudents(students, filename);
                 cout << "Saved " << students.size() << " student(s) to file. Exiting." << endl;
