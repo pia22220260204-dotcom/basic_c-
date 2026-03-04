@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <fstream> // file input/output
 using namespace std;
 // 학생클래스
 // 이름, 국 영 수
@@ -31,6 +32,13 @@ class Student{
         this->average = total / 3;
         calculateGrade();
     }
+
+    // getters for persistence
+    string getName() const { return name; }
+    int getKor() const { return scores.at("kor"); }
+    int getEng() const { return scores.at("eng"); }
+    int getMath() const { return scores.at("math"); }
+
     void printInfo(){
         cout << "Name: " << name << endl;
         cout << "Scores: 국어:" << scores["kor"] << " 영어:" << scores["eng"] << " 수학:" << scores["math"] << endl;
@@ -45,13 +53,46 @@ class Student{
 };
 
 
+// load existing student records from disk
+vector<Student> loadStudents(const string& filename) {
+    vector<Student> list;
+    ifstream fin(filename);
+    if (!fin) return list; // file may not exist yet
+    string name;
+    int kor, eng, math;
+    while (fin >> name >> kor >> eng >> math) {
+        list.emplace_back(name, kor, eng, math);
+    }
+    return list;
+}
+
+// save all student records to disk
+void saveStudents(const vector<Student>& list, const string& filename) {
+    ofstream fout(filename);
+    for (const auto& s : list) {
+        fout << s.getName() << ' ' << s.getKor() << ' ' << s.getEng() << ' ' << s.getMath() << '\n';
+    }
+}
+
 int main(){
+    const string filename = "students.txt";
+    vector<Student> students = loadStudents(filename);
+    cout << "Loaded " << students.size() << " student(s) from file." << endl;
+    for (auto& st : students) {
+        st.printInfo();
+        cout << "---\n";
+    }
+
     cout<<"학생 정보를 입력하세요(이름 국어 영어 수학)\n";
     string name;
     int kor, eng, math;
-    cin >> name >> kor >> eng >> math;
-    Student s(name, kor, eng, math);
-    s.printInfo();
+    if (cin >> name >> kor >> eng >> math) {
+        students.emplace_back(name, kor, eng, math);
+        students.back().printInfo();
+    }
+
+    saveStudents(students, filename);
+    cout << "Saved " << students.size() << " student(s) to file." << endl;
     return 0;
 
 }
