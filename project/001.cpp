@@ -78,13 +78,10 @@ int main(){
     const string filename = "students.txt";
     vector<Student> students = loadStudents(filename);
     cout << "Loaded " << students.size() << " student(s) from file." << endl;
-    for (auto& st : students) {
-        st.printInfo();
-        cout << "---\n";
-    }
+    
 
     while(true){
-        cout<<"1. 입력 2. 종료\n";
+        cout<<"1. 입력 2.전체출력 3.출력(점수순)4. 종료\n";
         int choice;
         cin >> choice;
         string name;
@@ -97,6 +94,17 @@ int main(){
                 }
                 break;            
             case 2:
+                for (auto& st : students) {
+                    st.printInfo();
+                    cout << "---\n";
+                }
+            case 3:
+                sort(students.begin(), students.end());
+                for (auto& st : students) {
+                    st.printInfo();
+                    cout << "---\n";
+                }
+            case 4: // 종료
                 saveStudents(students, filename);
                 cout << "Saved " << students.size() << " student(s) to file. Exiting." << endl;
                 return 0;
