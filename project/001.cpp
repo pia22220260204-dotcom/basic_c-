@@ -83,16 +83,28 @@ int main(){
         cout << "---\n";
     }
 
-    cout<<"학생 정보를 입력하세요(이름 국어 영어 수학)\n";
-    string name;
-    int kor, eng, math;
-    if (cin >> name >> kor >> eng >> math) {
-        students.emplace_back(name, kor, eng, math);
-        students.back().printInfo();
+    while(true){
+        cout<<"1. 입력 2. 종료\n";
+        int choice;
+        cin >> choice;
+        string name;
+        int kor, eng, math;
+        switch(choice){
+            case 1:                
+                cout<<"학생 정보를 입력하세요(이름 국어 영어 수학)\n";                
+                if (cin >> name >> kor >> eng >> math) {
+                    students.emplace_back(name, kor, eng, math);
+                }
+                break;            
+            case 2:
+                saveStudents(students, filename);
+                cout << "Saved " << students.size() << " student(s) to file. Exiting." << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Please enter 1 or 2.\n";
+        }
     }
 
-    saveStudents(students, filename);
-    cout << "Saved " << students.size() << " student(s) to file." << endl;
     return 0;
 
 }
